@@ -5,7 +5,7 @@
 #include <unistd.h>
 
 void file_to_lexer(FILE *fichier) {
-    token* tokens = lexer(fichier);
+    token** tokens = lexer(fichier);
     print_tokens(tokens);
     free(tokens);
 }
