@@ -38,7 +38,7 @@ token *create_token(type_token type, const char *value) {
 }
 
 int is_alpha(char c) { // si une lettre
-    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c==' ';
 }
 
 int is_digit(char c) { // si un chiffre
@@ -62,7 +62,6 @@ type_token get_token_type(char c) { // récupérer le type
         case '}': return RBRACE;
         case ';': return SEMICOLON;
         case '=': return ASSIGN;
-        case '"': return QUOTE;
         case '+':
         case '-':
         case '*':
@@ -84,7 +83,8 @@ token **lexer(FILE *file) {
     char c;
 
     while ((c = fgetc(file)) != EOF) {
-        if (c == ' ' || c == '\n') { // si espace
+        int is_quote;
+        if ((c == ' ' && is_quote==0)|| c == '\n') { // si espace
             continue;
         }
 
@@ -113,6 +113,11 @@ token **lexer(FILE *file) {
             buffer[i] = '\0';  
             ungetc(c, file);  // remettre le dernier caractère dans le flux
             tokens[token_index++] = create_token(NUMBER, buffer);
+        } else if (c=='"'){
+            if(is_quote==1)is_quote=0;
+            else is_quote=1;
+            char tmp[2] = {c, '\0'};
+            tokens[token_index++] = create_token(QUOTE, tmp);
         } else {  
             char tmp[2] = {c, '\0'};
             tokens[token_index++] = create_token(get_token_type(c), tmp);
