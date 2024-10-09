@@ -1,27 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define INITIAL_TOKEN_CAPACITY 10 
-#define MAX_TOKEN_LEN 256
-
-typedef enum {
-    KEYWORD,
-    IDENTIFIER,
-    NUMBER,
-    LPAREN,
-    RPAREN,
-    LBRACE,
-    RBRACE,
-    SEMICOLON,
-    ASSIGN,
-    OPERATOR,
-} type_token;
-
-typedef struct {
-    type_token type;
-    char *value;
-} token;
+#include "../include/lexer.h"
 
 #define MAX_KEYWORDS 10 // nombre max de mot clé
 const char *keywords[MAX_KEYWORDS] = { //définir les mot clé
@@ -82,6 +62,7 @@ type_token get_token_type(char c) { // récupérer le type
         case '}': return RBRACE;
         case ';': return SEMICOLON;
         case '=': return ASSIGN;
+        case '"': return QUOTE;
         case '+':
         case '-':
         case '*':
@@ -164,6 +145,7 @@ const char* token_type_to_string(type_token type) {
         case LBRACE: return "LBRACE";
         case RBRACE: return "RBRACE";
         case SEMICOLON: return "SEMICOLON";
+        case QUOTE: return "QUOTE";
         default: return "UNKNOWN";
     }
 }
