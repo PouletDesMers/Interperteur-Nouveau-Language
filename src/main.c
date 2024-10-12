@@ -4,13 +4,7 @@
 #include <time.h>
 #include <unistd.h>
 
-void file_to_lexer(FILE *fichier) {
-    token** tokens = lexer(fichier);
-    print_tokens(tokens);
-    free(tokens);
-}
-
-void no_arguments() {
+token ** no_arguments() {
     time_t timestamp;
     char filename[100];
     FILE *fichier = NULL;
@@ -27,36 +21,38 @@ void no_arguments() {
     while (fgets(input, sizeof(input), stdin) != NULL) {
         fputs(input, fichier);
     }
-
+    token ** tokens=lexer(fichier);
+    print_tokens(tokens);
     rewind(fichier);
-    file_to_lexer(fichier);
     fclose(fichier);
-
     if (remove(filename) != 0) {
         printf("Erreur lors de la suppression du fichier\n");
         exit(1);
     }
+    return tokens;
 }
 
-void one_argument(char *filename) {
+token ** one_argument(char *filename) {
     FILE *fichier = NULL;
     if ((fichier = fopen(filename, "r")) == NULL) {
         printf("Erreur lors de l'ouverture du fichier\n");
         exit(1);
     }
-    file_to_lexer(fichier);
+    token ** tokens=lexer(fichier);
     fclose(fichier);
+    return tokens;
 }
 
 int main(int argc, char **argv) {
+    token **tokens;
     if (argc == 1) {
-        no_arguments();
-        return 0;
+        tokens=no_arguments();
     } else if (argc == 2) {
-        one_argument(argv[1]);
-        return 0;
+        tokens=one_argument(argv[1]);
     } else {
         printf("trop d'arguments\n");
         return 1;
     }
+    print_tokens(tokens);
+    return 0;
 }
