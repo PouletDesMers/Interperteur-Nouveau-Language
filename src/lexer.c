@@ -84,7 +84,6 @@ token **lexer(FILE *file) {
 
     int is_quote=0;
     while ((c = fgetc(file)) != EOF) {
-        printf("%d,%c\n",is_quote,c);
         if ((c == ' ' && is_quote == 0) || c == '\n') {
             continue;
         }
