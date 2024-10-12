@@ -160,6 +160,6 @@ const char* token_type_to_string(type_token type) {
 
 void print_tokens(token **tokens) {
     for (int i = 0; tokens[i] != NULL; i++) {
-        printf("Token Type: %s, Value: %s\n", token_type_to_string(tokens[i]->type), tokens[i]->value);
+            printf("Token Type: %s, Value: %s\n", token_type_to_string(tokens[i]->type), tokens[i]->value);
     }
 }

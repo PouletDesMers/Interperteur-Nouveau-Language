@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "../include/lexer.h"
+#include "../include/parser.h"
 #include <time.h>
 #include <unistd.h>
 
@@ -53,6 +53,6 @@ int main(int argc, char **argv) {
         printf("trop d'arguments\n");
         return 1;
     }
-    print_tokens(tokens);
+    parser(tokens);
     return 0;
 }
