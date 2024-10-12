@@ -1,27 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define INITIAL_TOKEN_CAPACITY 10 
-#define MAX_TOKEN_LEN 256
-
-typedef enum {
-    KEYWORD,
-    IDENTIFIER,
-    NUMBER,
-    LPAREN,
-    RPAREN,
-    LBRACE,
-    RBRACE,
-    SEMICOLON,
-    ASSIGN,
-    OPERATOR,
-} type_token;
-
-typedef struct {
-    type_token type;
-    char *value;
-} token;
+#include "../include/lexer.h"
 
 #define MAX_KEYWORDS 10 // nombre max de mot clé
 const char *keywords[MAX_KEYWORDS] = { //définir les mot clé
@@ -102,8 +82,9 @@ token **lexer(FILE *file) {
     int token_index = 0;
     char c;
 
+    int is_quote=0;
     while ((c = fgetc(file)) != EOF) {
-        if (c == ' ' || c == '\n') { // si espace
+        if ((c == ' ' && is_quote == 0) || c == '\n') {
             continue;
         }
 
@@ -111,7 +92,7 @@ token **lexer(FILE *file) {
             int i = 0;
             buffer[i++] = c; // pour les chaînes de caractères
             c = fgetc(file);
-            while (is_alpha(c) || is_digit(c)) {
+            while (is_alpha(c) || is_digit(c)||(c == ' ' && is_quote == 1)) {
                 buffer[i++] = c;
                 c = fgetc(file);
             }
@@ -132,6 +113,14 @@ token **lexer(FILE *file) {
             buffer[i] = '\0';  
             ungetc(c, file);  // remettre le dernier caractère dans le flux
             tokens[token_index++] = create_token(NUMBER, buffer);
+        } else if (c=='"'){
+            if(is_quote==1){
+                is_quote=0;
+            } else { 
+                is_quote=1;
+            }
+            char tmp[2] = {c, '\0'};
+            tokens[token_index++] = create_token(QUOTE, tmp);
         } else {  
             char tmp[2] = {c, '\0'};
             tokens[token_index++] = create_token(get_token_type(c), tmp);
@@ -164,6 +153,7 @@ const char* token_type_to_string(type_token type) {
         case LBRACE: return "LBRACE";
         case RBRACE: return "RBRACE";
         case SEMICOLON: return "SEMICOLON";
+        case QUOTE: return "QUOTE";
         default: return "UNKNOWN";
     }
 }

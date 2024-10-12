@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#define MAX_TOKENS 256
+#define INITIAL_TOKEN_CAPACITY 10 
 #define MAX_TOKEN_LEN 64
 
 typedef enum {
@@ -16,6 +16,7 @@ typedef enum {
     LBRACE, // {
     RBRACE, // }
     SEMICOLON, // ;
+    QUOTE, // "
 } type_token;
 
 typedef struct {
@@ -23,5 +24,5 @@ typedef struct {
     char *value;
 } token;
 
-token *lexer(FILE *file);
-void print_tokens(token *tokens);
+token **lexer(FILE *file);
+void print_tokens(token **tokens);
