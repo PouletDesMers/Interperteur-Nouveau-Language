@@ -22,4 +22,4 @@ AST *parse_facteur(token **tokens, int *indice);
 AST *parse_operation(token **tokens, int *indice);
 AST *parse_nombre(token **tokens, int *indice);
 AST *parser(token **tokens);
-void affichage(AST *noeud);
+void parseuraffichage(AST *noeud);

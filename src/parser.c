@@ -62,16 +62,16 @@ AST *parser(token **tokens) { //appel syntasyque
     return parse_nombre(tokens, &indice);
 }
 
-void affichage(AST *noeud) {
+void parseuraffichage(AST *noeud) {
     if (!noeud) return;
     
     if (noeud->type == AST_Nombre) {
         printf("%d", noeud->valeur);
     } else if (noeud->type == AST_Operation) {
         printf("(");
-        affichage(noeud->ope.gauche);
+        parseuraffichage(noeud->ope.gauche);
         printf(" %c ", noeud->ope.operation);
-        affichage(noeud->ope.droite);
+        parseuraffichage(noeud->ope.droite);
         printf(")");
     }
 }
