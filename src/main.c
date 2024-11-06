@@ -22,8 +22,13 @@ token ** no_arguments() {
         fputs(input, fichier);
     }
     token ** tokens=lexer(fichier);
-    print_tokens(tokens);
     rewind(fichier);
+    if (tokens == NULL) {
+        printf("Erreur lors de l'appel du lexer\n");
+        fclose(fichier);
+        remove(filename);
+        exit(1);
+    }
     fclose(fichier);
     if (remove(filename) != 0) {
         printf("Erreur lors de la suppression du fichier\n");
@@ -53,6 +58,9 @@ int main(int argc, char **argv) {
         printf("trop d'arguments\n");
         return 1;
     }
-    parser(tokens);
+    print_tokens(tokens);
+    printf("---------------------------------");
+    AST * ast_test=parser(tokens);
+    parseuraffichage(ast_test);
     return 0;
 }
