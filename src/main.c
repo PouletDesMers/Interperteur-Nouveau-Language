@@ -18,19 +18,24 @@ token ** no_arguments() {
     }
 
     char input[500];
+    printf("Nom du fichier temporaire (Ctrl+D pour terminer) : %s\n", filename);
+
     while (fgets(input, sizeof(input), stdin) != NULL) {
         fputs(input, fichier);
     }
-    token ** tokens=lexer(fichier);
-    rewind(fichier);
+
+    fflush(fichier);  
+    rewind(fichier);  
+    token **tokens = lexer(fichier);
+
     if (tokens == NULL) {
         printf("Erreur lors de l'appel du lexer\n");
         fclose(fichier);
         remove(filename);
         exit(1);
     }
-    fclose(fichier);
-    if (remove(filename) != 0) {
+    fclose(fichier);  
+    if (remove(filename) != 0) {  
         printf("Erreur lors de la suppression du fichier\n");
         exit(1);
     }
