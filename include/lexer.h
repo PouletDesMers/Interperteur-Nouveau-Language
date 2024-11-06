@@ -1,4 +1,5 @@
-
+#ifndef LEXER_H
+#define LEXER_H
 
 #include <stdio.h>
 
@@ -26,3 +27,5 @@ typedef struct {
 
 token **lexer(FILE *file);
 void print_tokens(token **tokens);
+
+#endif // LEXER_H
