@@ -1,10 +1,7 @@
 #include "../include/parser.h"
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <string.h>
-
-
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 AST *noeud_nombre(int valeur) { //crée le noeud ast, 
     AST *noeud = malloc(sizeof(AST)); // alloue la mémoire
