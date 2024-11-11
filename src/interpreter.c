@@ -5,8 +5,8 @@
 #include "../include/parser.h"
 #include "../include/lexer.h"
 #include "../include/symbolTable.h"
+#include "../include/ast.h"
 
-// Fonction d'interprétation principale
 void interpret(const char *input) {
     // Tokenisation de l'entrée
     FILE *temp_file = tmpfile();
@@ -15,42 +15,58 @@ void interpret(const char *input) {
     token **tokens = lexer(temp_file);
     fclose(temp_file);
 
+    if (!tokens[0]) return;
+
+    int indice = 0;
+
     // Vérifier pour une commande "print"
-    if (tokens[0] && tokens[0]->type == IDENTIFIER && strcmp(tokens[0]->value, "print") == 0) {
-        if (tokens[1] && tokens[1]->type == IDENTIFIER) {
-            int value = hash_table_get(tokens[1]->value);
-            printf("%d\n", value);
+    if (tokens[indice]->type == IDENTIFIER && strcmp(tokens[indice]->value, "print") == 0) {
+        indice++;
+        // Vérifier s'il y a une parenthèse ouvrante
+        if (tokens[indice] && tokens[indice]->type == LPAREN) {
+            indice++; // Passer la parenthèse ouvrante
+            // Parser l'expression à l'intérieur de print()
+            AST *ast = parse_expression(tokens, &indice);
+            if (tokens[indice] && tokens[indice]->type == RPAREN) {
+                indice++; // Passer la parenthèse fermante
+                if (ast) {
+                    int value = eval(ast);
+                    printf("%d\n", value);
+                } else {
+                    printf("Erreur: Expression incorrecte dans print\n");
+                }
+            } else {
+                printf("Erreur: Parenthèse fermante attendue après l'argument de print\n");
+            }
         } else {
-            printf("Erreur: print nécessite une variable\n");
+            printf("Erreur: Parenthèse ouvrante attendue après print\n");
         }
         return;
     }
 
     // Gérer une assignation de type "x = expression"
-    if (tokens[1] && tokens[1]->type == ASSIGN) {
-        if (tokens[0]->type == IDENTIFIER) {
-            char *var_name = tokens[0]->value;
-            int index = 2;
-            AST *ast = parse_nombre(tokens, &index);
-            if (ast) {
-                int result = eval(ast);
-                hash_table_set(var_name, result);
-                free(ast);
-            } else {
-                printf("Erreur: expression incorrecte\n");
-            }
+    if (tokens[indice]->type == IDENTIFIER && tokens[indice + 1] &&
+        tokens[indice + 1]->type == ASSIGN) {
+        char *var_name = tokens[indice]->value;
+        indice += 2; // Passer le nom de la variable et le signe '='
+        AST *ast = parse_expression(tokens, &indice);
+        if (ast) {
+            int result = eval(ast);
+            hash_table_set(var_name, result);
+            // Libérer l'AST après utilisation
+            // (À implémenter si nécessaire)
         } else {
-            printf("Erreur: format de variable incorrect\n");
+            printf("Erreur: Expression incorrecte\n");
         }
         return;
     }
 
-    // Évaluer l'expression mathématique
-    int index = 0;
-    AST *ast = parser(tokens);
+    // Sinon, évaluer l'expression mathématique
+    AST *ast = parse_expression(tokens, &indice);
     if (ast) {
         int result = eval(ast);
         printf("%d\n", result);
-        free(ast);
+    } else {
+        printf("Erreur: Entrée non reconnue\n");
     }
 }

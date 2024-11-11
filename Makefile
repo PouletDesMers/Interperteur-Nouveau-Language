@@ -1,4 +1,4 @@
-EXEC = interpreter
+EXEC = mon_interpreteur
 SRC_OBJ = obj
 SRC_DIR = src
 INCLUDE_DIR = include
@@ -15,11 +15,7 @@ OBJ_FILES = $(SRC_OBJ)/ast.o $(SRC_OBJ)/interpreter.o $(SRC_OBJ)/lexer.o $(SRC_O
 $(EXEC): $(OBJ_FILES)
 	$(CC) $(CFLAGS) -o $@ $^
 
-$(SRC_OBJ)/%.o: $(SRC_DIR)/%.c $(INCLUDE_DIR)/%.h
-	@mkdir -p $(SRC_OBJ)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(SRC_OBJ)/main.o: $(SRC_DIR)/main.c
+$(SRC_OBJ)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(SRC_OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 
