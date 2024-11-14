@@ -1,71 +1,44 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "../include/parser.h"
-#include <time.h>
-#include <unistd.h>
+#include <string.h>
+#include "../include/interpreter.h"
 
-token ** no_arguments() {
-    time_t timestamp;
-    char filename[100];
-    FILE *fichier = NULL;
-    
-    time(&timestamp);//création du nom temporaire du fichier "tmp-{timestamp.cbester}"
-    snprintf(filename, 100, "tmp-%ld.cbest", timestamp);
-    
-    if ((fichier = fopen(filename, "w+")) == NULL) {
-        printf("Erreur lors de l'ouverture du fichier\n");
-        exit(1);
+void file_mode(const char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        fprintf(stderr, "Erreur lors de l'ouverture du fichier %s\n", filename);
+        exit(EXIT_FAILURE);
     }
 
-    char input[500];
-    printf("Nom du fichier temporaire (Ctrl+D pour terminer) : %s\n", filename);
-
-    while (fgets(input, sizeof(input), stdin) != NULL) {
-        fputs(input, fichier);
+    char line[256];
+    while (fgets(line, sizeof(line), file)) {
+        // Enlever le saut de ligne à la fin
+        line[strcspn(line, "\n")] = '\0';
+        interpret(line);
     }
 
-    fflush(fichier);  
-    rewind(fichier);  
-    token **tokens = lexer(fichier);
-
-    if (tokens == NULL) {
-        printf("Erreur lors de l'appel du lexer\n");
-        fclose(fichier);
-        remove(filename);
-        exit(1);
-    }
-    fclose(fichier);  
-    if (remove(filename) != 0) {  
-        printf("Erreur lors de la suppression du fichier\n");
-        exit(1);
-    }
-    return tokens;
-}
-
-token ** one_argument(char *filename) {
-    FILE *fichier = NULL;
-    if ((fichier = fopen(filename, "r")) == NULL) {
-        printf("Erreur lors de l'ouverture du fichier\n");
-        exit(1);
-    }
-    token ** tokens=lexer(fichier);
-    fclose(fichier);
-    return tokens;
+    fclose(file);
 }
 
 int main(int argc, char **argv) {
-    token **tokens;
     if (argc == 1) {
-        tokens=no_arguments();
+        // Mode interactif avec REPL (Read-Eval-Print Loop)
+        char input[256];
+        printf("Mode interactif. Tapez 'exit' pour quitter.\n");
+        while (1) {
+            printf("> ");
+            if (fgets(input, sizeof(input), stdin) == NULL) break; // Fin si CTRL+D
+            // Enlever le saut de ligne à la fin
+            input[strcspn(input, "\n")] = '\0';
+            if (strcmp(input, "exit") == 0) break; // Commande 'exit'
+            interpret(input); // Interpréter l'entrée
+        }
     } else if (argc == 2) {
-        tokens=one_argument(argv[1]);
+        // Mode fichier : lire les instructions depuis le fichier fourni
+        file_mode(argv[1]);
     } else {
-        printf("trop d'arguments\n");
+        printf("Usage: %s [nom_du_fichier]\n", argv[0]);
         return 1;
     }
-    print_tokens(tokens);
-    printf("---------------------------------");
-    AST * ast_test=parser(tokens);
-    parseuraffichage(ast_test);
     return 0;
 }
