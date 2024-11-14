@@ -22,7 +22,7 @@ AST *noeud_operation(char operation, AST *gauche, AST *droite) { //crée un noeu
     return noeud;
 }
 
-AST *parse_facteur(token **tokens, int *indice) { //analyse le facteur, nmbre nombre convertie ast nombre
+AST *parse_facteur(token **tokens, int *indice) { //analyse le facteur, nmbre nombre convertie ast --> nombre
     token *tok = tokens[*indice];
     if (tok->type == NUMBER) {
         (*indice)++;
