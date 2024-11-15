@@ -40,7 +40,10 @@ int eval(AST *noeud) {
 
 // Fonction pour afficher l'AST (bonus)
 void afficher_AST(AST *noeud, int niveau) {
-    if (!noeud) return;
+    if (!noeud) {
+        printf("AST vide au niveau %d\n", niveau);
+        return;
+    }
     for (int i = 0; i < niveau; i++) printf("  ");
     if (noeud->type == AST_Nombre) {
         printf("Nombre: %d\n", noeud->valeur);

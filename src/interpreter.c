@@ -7,6 +7,29 @@
 #include "../include/symbolTable.h"
 #include "../include/ast.h"
 
+// AST global avec une liste chaînée
+AST_Node *global_ast_head = NULL;  // Tête de la liste chaînée des ASTs
+
+
+void ajouter_ast_global(AST *ast) {
+    // Créer un nouveau nœud pour la liste chaînée
+    AST_Node *new_node = malloc(sizeof(AST_Node));
+    new_node->ast = ast;
+    new_node->next = NULL;
+
+    // Si la liste est vide, initialiser la tête de la liste
+    if (global_ast_head == NULL) {
+        global_ast_head = new_node;
+    } else {
+        // Sinon, ajouter le nœud à la fin de la liste
+        AST_Node *current = global_ast_head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = new_node;
+    }
+}
+
 void interpret(const char *input) {
     // Tokenisation de l'entrée
     FILE *temp_file = tmpfile();
@@ -22,7 +45,6 @@ void interpret(const char *input) {
     // Vérifier pour une commande "print"
     if (tokens[indice]->type == IDENTIFIER && strcmp(tokens[indice]->value, "print") == 0) {
         indice++;
-        // Vérifier s'il y a une parenthèse ouvrante
         if (tokens[indice] && tokens[indice]->type == LPAREN) {
             indice++; // Passer la parenthèse ouvrante
             // Parser l'expression à l'intérieur de print()
@@ -32,6 +54,7 @@ void interpret(const char *input) {
                 if (ast) {
                     int value = eval(ast);
                     printf("%d\n", value);
+                    ajouter_ast_global(ast);  
                 } else {
                     printf("Erreur: Expression incorrecte dans print\n");
                 }
@@ -55,6 +78,7 @@ void interpret(const char *input) {
             hash_table_set(var_name, result);
             // Libérer l'AST après utilisation
             // (À implémenter si nécessaire)
+            ajouter_ast_global(ast);  
         } else {
             printf("Erreur: Expression incorrecte\n");
         }
@@ -66,7 +90,19 @@ void interpret(const char *input) {
     if (ast) {
         int result = eval(ast);
         printf("%d\n", result);
+        ajouter_ast_global(ast);  
     } else {
         printf("Erreur: Entrée non reconnue\n");
+    }
+}
+
+
+void afficher_AST_global() {
+    printf("Affichage de l'AST global après exécution:\n");
+
+    AST_Node *current = global_ast_head;
+    while (current != NULL) {
+        afficher_AST(current->ast, 0);  // Afficher chaque AST dans la liste
+        current = current->next;
     }
 }
