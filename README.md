@@ -41,12 +41,38 @@ L'organisation du projet se divise en plusieurs dossiers et fichiers pour une me
 
 ## Compilation et Exécution
 ### Compilation
-Pour compiler le projet, vous pouvez utiliser gcc en ligne de commande ou créer un Makefile pour automatiser le processus. Voici un exemple de commande pour compiler le programme :
+Pour compiler le projet, vous pouvez utiliser gcc en ligne de commande ou utiliser le Makefile fournis pour automatiser le processus. 
+
+#### Utilisation du Makefile
+Le projet inclut un fichier Makefile pour simplifier le processus de compilation. Le Makefile contient les instructions nécessaires pour compiler le programme et gérer les dépendances entre les fichiers.
+
+Pour compiler le programme à l'aide du Makefile, ouvrez un terminal dans le répertoire racine du projet et exécutez la commande suivante :
+Voici un exemple de commande pour compiler le programme sans le Makefile :
+
+``` bash
+make
+```
+Cette commande :
+
+Compile tous les fichiers sources situés dans le dossier src/.
+Place l'exécutable résultant (généralement nommé interpreteur) dans le répertoire courant.
+Si vous souhaitez spécifier un nom d'exécutable différent ou modifier des options de compilation, vous pouvez ajuster le Makefile en conséquence.
+
+#### Nettoyage
+Pour supprimer les fichiers objets et l'exécutable générés lors de la compilation, vous pouvez exécuter :
+
+```bash
+make clean
+```
+Cette commande supprime les fichiers intermédiaires et l'exécutable, vous permettant de repartir sur une compilation propre.
+
+Vérifiez d'avoir installé make sur votre poste avant d'utiliser ces commandes, sinon cela vous procurera des erreurs !!
+
+Si vous préférez compiler manuellement sans utiliser le Makefile, vous pouvez utiliser la commande suivante :
 
 ``` bash
 gcc -o interpreteur src/main.c src/lexer.c src/parser.c src/ast.c src/interpreter.c src/symbolTable.c -I include
 ```
-
 Cette commande :
 
 - Compile tous les fichiers sources situés dans le dossier src/.
