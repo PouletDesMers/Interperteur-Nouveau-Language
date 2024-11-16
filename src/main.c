@@ -40,5 +40,8 @@ int main(int argc, char **argv) {
         printf("Usage: %s [nom_du_fichier]\n", argv[0]);
         return 1;
     }
+
+    // Afficher l'AST global après l'exécution du programme
+    afficher_AST_global();
     return 0;
 }

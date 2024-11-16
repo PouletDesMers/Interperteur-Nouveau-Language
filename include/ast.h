@@ -15,6 +15,11 @@ typedef struct AST {
     };
 } AST;
 
+typedef struct AST_Node {
+    AST *ast; 
+    struct AST_Node *next;
+} AST_Node;
+
 // Fonctions pour créer des nœuds AST
 AST *noeud_nombre(int valeur);
 AST *noeud_operation(char operation, AST *gauche, AST *droite);

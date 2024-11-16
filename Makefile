@@ -1,4 +1,5 @@
-EXEC = mon_interpreteur
+EXEC = interpreter
+SRC_OBJ = obj
 SRC_OBJ = obj
 SRC_DIR = src
 INCLUDE_DIR = include
@@ -11,11 +12,23 @@ CFLAGS = -Wall -I$(INCLUDE_DIR)
 
 OBJ_FILES = $(SRC_OBJ)/ast.o $(SRC_OBJ)/interpreter.o $(SRC_OBJ)/lexer.o $(SRC_OBJ)/parser.o \
             $(SRC_OBJ)/symbolTable.o $(SRC_OBJ)/main.o
+OBJ_FILES = $(SRC_OBJ)/ast.o $(SRC_OBJ)/interpreter.o $(SRC_OBJ)/lexer.o $(SRC_OBJ)/parser.o \
+            $(SRC_OBJ)/symbolTable.o $(SRC_OBJ)/main.o
 
 $(EXEC): $(OBJ_FILES)
 	$(CC) $(CFLAGS) -o $@ $^
 
-$(SRC_OBJ)/%.o: $(SRC_DIR)/%.c
+$(SRC_OBJ)/%.o: $(SRC_DIR)/%.c $(INCLUDE_DIR)/%.h
+	@mkdir -p $(SRC_OBJ)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(SRC_OBJ)/main.o: $(SRC_DIR)/main.c
+	@mkdir -p $(SRC_OBJ)
+$(SRC_OBJ)/%.o: $(SRC_DIR)/%.c $(INCLUDE_DIR)/%.h
+	@mkdir -p $(SRC_OBJ)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(SRC_OBJ)/main.o: $(SRC_DIR)/main.c
 	@mkdir -p $(SRC_OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 
