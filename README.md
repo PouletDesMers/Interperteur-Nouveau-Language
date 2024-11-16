@@ -39,11 +39,85 @@ L'organisation du projet se divise en plusieurs dossiers et fichiers pour une me
 - **interpreter.h** : Contient les prototypes de fonctions pour l'évaluation et l'exécution des expressions.
 - **symbolTable.h** : Définit les structures et fonctions pour la gestion des variables.
 
+## Compilation et Exécution
+### Compilation
+Pour compiler le projet, vous pouvez utiliser gcc en ligne de commande ou créer un Makefile pour automatiser le processus. Voici un exemple de commande pour compiler le programme :
+
+``` bash
+gcc -o interpreteur src/main.c src/lexer.c src/parser.c src/ast.c src/interpreter.c src/symbolTable.c -I include
+```
+
+Cette commande :
+
+- Compile tous les fichiers sources situés dans le dossier src/.
+- Utilise le drapeau -I include pour indiquer le dossier des fichiers d'en-tête.
+- Produit un exécutable nommé interpreteur.
+
+### Exécution
+Le programme peut être exécuté en deux modes :
+
+#### Mode Interactif
+Pour lancer le programme en mode interactif, exécutez simplement l'exécutable sans arguments :
+
+```bash
+./interpreteur
+```
+
+En mode interactif, vous pouvez saisir des instructions directement dans la console. Tapez exit pour quitter le programme.
+
+#### Exemple :
+
+``` shell
+Mode interactif. Tapez 'exit' pour quitter.
+> x = 5 + 3
+> print(x)
+8
+> y = x * 2
+> print(y)
+16
+> exit
+
+Affichage de l'AST global après exécution:
+```
+
+#### Mode Fichier
+Pour exécuter un script de code à partir d'un fichier, lancez le programme en fournissant le nom du fichier en argument :
+
+``` bash
+./interpreteur mon_script.txt
+```
+
+#### Exemple :
+
+Supposons que vous ayez un fichier mon_script.txt contenant :
+```
+a = 10
+b = a + 5
+print(b)
+```
+
+En exécutant :
+
+```bash
+./interpreteur mon_script.txt
+```
+
+Le programme affichera :
+
+``` bash
+15
+Affichage de l'AST global après exécution:
+```
+
+### Aide
+Si vous fournissez plus d'un argument, le programme affichera l'usage correct :
+
+``` bash
+Usage: ./interpreteur [nom_du_fichier]
+```
+
 ## Notion du projet
 https://nospy.notion.site/Projet-Cr-ation-d-un-Interpr-teur-de-Langage-de-Programmation-e890d1624945429eafc4ce91cbcce315#0ef937fe9e844396a9da1af3185b965e
 
 ## Trello pour suivi des tâches
 https://trello.com/invite/b/67028cf74a2e4ed05536b39c/ATTI4653cbb1bdbdabec5c70347f1eda0899F2D0E4CC/creation-dun-interpreteur
-
-## Ressources supplémentaires
-https://www.youtube.com/watch?v=YbsZRaaXeZA&t
