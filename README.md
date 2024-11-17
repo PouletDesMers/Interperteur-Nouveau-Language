@@ -139,7 +139,8 @@ Affichage de l'AST global après exécution:
 Si vous fournissez plus d'un argument, le programme affichera l'usage correct :
 
 ``` bash
-Usage: ./interpreteur [nom_du_fichier]
+Vous ne pouvez pas utiliser plusieurs arguments.
+La commande utilisee doit etre : ./interpreter [nom_du_fichier]
 ```
 
 ## Notion du projet
@@ -147,3 +148,6 @@ https://nospy.notion.site/Projet-Cr-ation-d-un-Interpr-teur-de-Langage-de-Progra
 
 ## Trello pour suivi des tâches
 https://trello.com/invite/b/67028cf74a2e4ed05536b39c/ATTI4653cbb1bdbdabec5c70347f1eda0899F2D0E4CC/creation-dun-interpreteur
+
+## Lien du projet
+https://github.com/PouletDesMers/Interperteur-Nouveau-Language
