@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
         // mode fichier : lire les instructions depuis le fichier fourni
         file_mode(argv[1]);
     } else {
-        printf("Usage: %s [nom_du_fichier]\n", argv[0]);
+        printf("Voux ne pouvez pas utiliser plusieurs arguments.\nLa commande utilisee doit etre : %s [nom_du_fichier]\n", argv[0]);
         return 1;
     }
 
